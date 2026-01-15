@@ -4,7 +4,7 @@
 A React frontend for the CS2 League Stats API. Allows users to search for players, view their ESEA seasons, and see detailed statistics.
 
 ## Tech Stack
-- **Framework**: React 19
+- **Framework**: React 19.2.0
 - **Build Tool**: Vite
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + DaisyUI
