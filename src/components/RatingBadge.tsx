@@ -10,9 +10,9 @@ export function RatingBadge({ kdRatio, adr }: RatingBadgeProps) {
   const tier = getRatingTier(rating);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center flex-shrink-0">
       <div
-        className="relative w-20 h-20 rounded-full flex items-center justify-center"
+        className="relative w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center"
         style={{
           background: `conic-gradient(${tier.color} 0deg, ${tier.color} 360deg)`,
           padding: '3px',
@@ -20,7 +20,7 @@ export function RatingBadge({ kdRatio, adr }: RatingBadgeProps) {
       >
         <div className="w-full h-full rounded-full bg-base-100 flex items-center justify-center">
           <span
-            className="text-2xl font-bold"
+            className="text-xl md:text-2xl font-bold"
             style={{ color: tier.color }}
           >
             {rating.toFixed(2)}

@@ -121,8 +121,8 @@ export function PlayerPage() {
 
       {/* Stats Modal */}
       {(stats || loadingStats) && (
-        <dialog className="modal modal-open">
-          <div className="modal-box max-w-3xl p-0 bg-transparent shadow-none">
+        <dialog className="modal modal-open px-2">
+          <div className="modal-box w-full max-w-3xl p-0 bg-transparent shadow-none mx-2">
             {loadingStats ? (
               <div className="flex justify-center py-16">
                 <span className="loading loading-spinner loading-lg"></span>

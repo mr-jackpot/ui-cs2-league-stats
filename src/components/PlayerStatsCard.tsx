@@ -10,14 +10,14 @@ interface PlayerStatsCardProps {
 export function PlayerStatsCard({ stats }: PlayerStatsCardProps) {
   return (
     <div className="card bg-base-100 shadow-xl">
-      <div className="card-body">
+      <div className="card-body p-4 md:p-8">
         {/* Header with title and rating */}
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h2 className="card-title text-xl" style={{ color: 'var(--color-cs2)' }}>
+        <div className="flex justify-between items-start gap-4 mb-4 md:mb-6">
+          <div className="min-w-0 flex-1">
+            <h2 className="card-title text-base md:text-xl truncate" style={{ color: 'var(--color-cs2)' }}>
               {stats.competition_name}
             </h2>
-            <p className="text-base-content/60 text-sm mt-1">
+            <p className="text-base-content/60 text-xs md:text-sm mt-1">
               {stats.matches_played} matches played
             </p>
           </div>
@@ -28,7 +28,7 @@ export function PlayerStatsCard({ stats }: PlayerStatsCardProps) {
         </div>
 
         {/* Main stat bars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
           <StatBar
             label="K/D Ratio"
             value={stats.kd_ratio}
@@ -53,15 +53,15 @@ export function PlayerStatsCard({ stats }: PlayerStatsCardProps) {
         </div>
 
         {/* Win/Loss section */}
-        <div className="bg-base-200 rounded-lg p-4 mb-6">
-          <div className="flex flex-wrap justify-between items-center gap-4">
-            <div className="flex items-center gap-4">
-              <span className="text-base-content/70">Record:</span>
-              <span className="text-success font-bold text-lg">{stats.wins}W</span>
+        <div className="bg-base-200 rounded-lg p-3 md:p-4 mb-4 md:mb-6">
+          <div className="flex flex-wrap justify-between items-center gap-2 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
+              <span className="text-base-content/70 text-sm md:text-base">Record:</span>
+              <span className="text-success font-bold text-base md:text-lg">{stats.wins}W</span>
               <span className="text-base-content/50">-</span>
-              <span className="text-error font-bold text-lg">{stats.losses}L</span>
+              <span className="text-error font-bold text-base md:text-lg">{stats.losses}L</span>
               <span
-                className="px-2 py-1 rounded text-sm font-semibold"
+                className="px-2 py-1 rounded text-xs md:text-sm font-semibold"
                 style={{
                   backgroundColor: `color-mix(in srgb, var(--color-cs2) 20%, transparent)`,
                   color: 'var(--color-cs2)'
@@ -71,8 +71,8 @@ export function PlayerStatsCard({ stats }: PlayerStatsCardProps) {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-base-content/70">MVPs:</span>
-              <span className="font-bold text-lg" style={{ color: 'var(--color-cs2)' }}>
+              <span className="text-base-content/70 text-sm md:text-base">MVPs:</span>
+              <span className="font-bold text-base md:text-lg" style={{ color: 'var(--color-cs2)' }}>
                 {stats.mvps}
               </span>
             </div>
@@ -80,18 +80,18 @@ export function PlayerStatsCard({ stats }: PlayerStatsCardProps) {
         </div>
 
         {/* Combat stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-6">
           <StatBox value={stats.kills} label="Kills" highlight />
           <StatBox value={stats.deaths} label="Deaths" />
           <StatBox value={stats.assists} label="Assists" />
         </div>
 
         {/* Multi-kills section */}
-        <div className="bg-base-200 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-base-content/70 mb-3 uppercase tracking-wider">
+        <div className="bg-base-200 rounded-lg p-3 md:p-4">
+          <h3 className="text-xs md:text-sm font-semibold text-base-content/70 mb-2 md:mb-3 uppercase tracking-wider">
             Multi-Kills
           </h3>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-2 md:gap-4">
             <MultiKillBox value={stats.multi_kills.triples} label="3K" />
             <MultiKillBox value={stats.multi_kills.quads} label="4K" />
             <MultiKillBox value={stats.multi_kills.aces} label="ACE" highlight />
@@ -110,14 +110,14 @@ interface StatBoxProps {
 
 function StatBox({ value, label, highlight }: StatBoxProps) {
   return (
-    <div className="bg-base-200 p-4 rounded-lg text-center">
+    <div className="bg-base-200 p-2 md:p-4 rounded-lg text-center">
       <div
-        className="text-2xl font-bold"
+        className="text-xl md:text-2xl font-bold"
         style={highlight ? { color: 'var(--color-cs2)' } : undefined}
       >
         {value}
       </div>
-      <div className="text-sm text-base-content/60">{label}</div>
+      <div className="text-xs md:text-sm text-base-content/60">{label}</div>
     </div>
   );
 }
