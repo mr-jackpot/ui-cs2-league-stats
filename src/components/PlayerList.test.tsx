@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PlayerList } from './PlayerList';
 import type { Player } from '../types/api';
-import { countryCodeToFlag } from '../utils/countryFlag';
 
 const mockPlayers: Player[] = [
   {
@@ -34,8 +33,9 @@ describe('PlayerList', () => {
 
     expect(screen.getByText('TestPlayer1')).toBeInTheDocument();
     expect(screen.getByText('TestPlayer2')).toBeInTheDocument();
-    expect(screen.getByText(countryCodeToFlag('US'))).toBeInTheDocument();
-    expect(screen.getByText(countryCodeToFlag('GB'))).toBeInTheDocument();
+    // Flags are rendered as SVGs with title attributes
+    expect(screen.getByTitle('US')).toBeInTheDocument();
+    expect(screen.getByTitle('GB')).toBeInTheDocument();
   });
 
   it('renders player avatars', () => {

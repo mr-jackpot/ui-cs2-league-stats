@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PlayerProfile } from './PlayerProfile';
 import type { Player } from '../types/api';
-import { countryCodeToFlag } from '../utils/countryFlag';
 
 const mockPlayer: Player = {
   player_id: '123',
@@ -30,7 +29,8 @@ describe('PlayerProfile', () => {
       </PlayerProfile>
     );
 
-    expect(screen.getByText(countryCodeToFlag('US'))).toBeInTheDocument();
+    // Flag is rendered as SVG with title attribute
+    expect(screen.getByTitle('US')).toBeInTheDocument();
   });
 
   it('renders player avatar', () => {

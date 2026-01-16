@@ -1,5 +1,5 @@
 import type { Player } from '../types/api';
-import { countryCodeToFlag } from '../utils/countryFlag';
+import { CountryFlag } from '../utils/countryFlag';
 
 interface PlayerProfileProps {
   player: Player;
@@ -21,7 +21,7 @@ export function PlayerProfile({ player, onBack, children }: PlayerProfileProps) 
           )}
           <div>
             <h2 className="card-title">{player.nickname}</h2>
-            <span className="text-2xl" title={player.country}>{countryCodeToFlag(player.country)}</span>
+            <CountryFlag countryCode={player.country} className="w-8 h-5 rounded-sm" />
           </div>
           <button className="btn btn-ghost btn-sm ml-auto" onClick={onBack}>
             Back to results
