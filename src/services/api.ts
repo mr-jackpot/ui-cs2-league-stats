@@ -5,8 +5,10 @@ import type {
   PlayerStats,
 } from '../types/api';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export async function getPlayer(playerId: string): Promise<Player> {
-  const response = await fetch(`/players/${playerId}`);
+  const response = await fetch(`${API_BASE}/players/${playerId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch player');
   }
@@ -15,7 +17,7 @@ export async function getPlayer(playerId: string): Promise<Player> {
 
 export async function searchPlayers(nickname: string): Promise<PlayerSearchResponse> {
   const response = await fetch(
-    `/players/search?nickname=${encodeURIComponent(nickname)}`
+    `${API_BASE}/players/search?nickname=${encodeURIComponent(nickname)}`
   );
   if (!response.ok) {
     throw new Error('Failed to search players');
@@ -24,7 +26,7 @@ export async function searchPlayers(nickname: string): Promise<PlayerSearchRespo
 }
 
 export async function getPlayerSeasons(playerId: string): Promise<PlayerSeasonsResponse> {
-  const response = await fetch(`/players/${playerId}/esea`);
+  const response = await fetch(`${API_BASE}/players/${playerId}/esea`);
   if (!response.ok) {
     throw new Error('Failed to fetch player seasons');
   }
@@ -36,7 +38,7 @@ export async function getPlayerStats(
   competitionId: string
 ): Promise<PlayerStats> {
   const response = await fetch(
-    `/players/${playerId}/competitions/${competitionId}/stats`
+    `${API_BASE}/players/${playerId}/competitions/${competitionId}/stats`
   );
   if (!response.ok) {
     throw new Error('Failed to fetch player stats');
