@@ -1,73 +1,98 @@
-# React + TypeScript + Vite
+# CS2 League Stats UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for tracking Counter-Strike 2 player statistics from ESEA leagues.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Search for players by nickname
+- View player's ESEA season history
+- Detailed stats per season (K/D, ADR, win rate, headshot %, multi-kills)
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework**: React 19 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS + DaisyUI
+- **Routing**: React Router
+- **Testing**: Vitest + React Testing Library
 
-## Expanding the ESLint configuration
+## Quick Start
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# Install dependencies
+npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Requires the [backend API](https://github.com/mr-jackpot/cs2-league-stats) running on `http://localhost:3000`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev       # Start dev server with hot reload
+npm run build     # Build for production
+npm run preview   # Preview production build
+npm run test      # Run tests in watch mode
+npm run test:run  # Run tests once
+npm run lint      # Run ESLint
 ```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_URL` | Backend API URL | `` (empty, uses relative paths) |
+
+For production builds, set the API URL:
+
+```bash
+VITE_API_URL=https://your-api-url.com npm run build
+```
+
+## Deployment
+
+### Firebase Hosting (Frontend)
+
+```bash
+# Login to Firebase
+firebase login
+
+# Build with production API URL
+VITE_API_URL=https://your-cloud-run-url npm run build
+
+# Deploy
+firebase deploy --only hosting
+```
+
+### Configuration Files
+
+- `firebase.json` - Firebase Hosting configuration
+- `.firebaserc` - Firebase project settings
+
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+│   ├── Navbar.tsx
+│   ├── PlayerSearch.tsx
+│   ├── PlayerList.tsx
+│   ├── PlayerProfile.tsx
+│   ├── SeasonsList.tsx
+│   └── PlayerStatsCard.tsx
+├── pages/          # Page components
+│   ├── HomePage.tsx
+│   └── PlayerPage.tsx
+├── services/       # API client
+│   └── api.ts
+├── types/          # TypeScript types
+│   └── api.ts
+└── test/           # Test setup
+    └── setup.ts
+```
+
+## License
+
+MIT
