@@ -1,6 +1,6 @@
-# CS2 League Stats UI
+# CSScout
 
-React frontend for tracking Counter-Strike 2 player statistics from ESEA leagues.
+React frontend for scouting Counter-Strike 2 player statistics from ESEA leagues.
 
 ## Features
 
@@ -39,16 +39,14 @@ npm run test:run  # Run tests once
 npm run lint      # Run ESLint
 ```
 
-## Environment Variables
+## Configuration
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `VITE_API_URL` | Backend API URL | `` (empty, uses relative paths) |
+The API URL is configured in `src/config.ts`:
 
-For production builds, set the API URL:
-
-```bash
-VITE_API_URL=https://your-api-url.com npm run build
+```ts
+export const config = {
+  apiUrl: 'https://cs2-league-stats-857778773897.europe-west2.run.app',
+};
 ```
 
 ## Deployment
@@ -59,8 +57,8 @@ VITE_API_URL=https://your-api-url.com npm run build
 # Login to Firebase
 firebase login
 
-# Build with production API URL
-VITE_API_URL=https://your-cloud-run-url npm run build
+# Build for production
+npm run build
 
 # Deploy
 firebase deploy --only hosting

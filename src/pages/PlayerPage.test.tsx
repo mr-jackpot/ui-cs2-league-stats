@@ -148,7 +148,8 @@ describe('PlayerPage', () => {
       expect(screen.getByText('ESEA S55')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole('button', { name: 'View Stats' }));
+    // Button now says "View" instead of "View Stats"
+    await user.click(screen.getByRole('button', { name: /View/i }));
 
     await waitFor(() => {
       expect(screen.getByText('1.50')).toBeInTheDocument(); // K/D ratio
@@ -176,7 +177,8 @@ describe('PlayerPage', () => {
       expect(screen.getByText('TestPlayer')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByRole('button', { name: 'Back to results' }));
+    // Back button now just says "Back"
+    await user.click(screen.getByRole('button', { name: /Back/i }));
 
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });

@@ -77,7 +77,8 @@ describe('PlayerProfile', () => {
       </PlayerProfile>
     );
 
-    await user.click(screen.getByRole('button', { name: 'Back to results' }));
+    // Back button now just says "Back" (with icon on larger screens)
+    await user.click(screen.getByRole('button', { name: /Back/i }));
 
     expect(handleBack).toHaveBeenCalled();
   });

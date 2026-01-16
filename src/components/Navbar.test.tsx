@@ -11,7 +11,7 @@ describe('Navbar', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('CS2 League Stats')).toBeInTheDocument();
+    expect(screen.getByText('CSScout')).toBeInTheDocument();
   });
 
   it('renders a link to the home page', () => {
@@ -21,7 +21,8 @@ describe('Navbar', () => {
       </BrowserRouter>
     );
 
-    const link = screen.getByRole('link', { name: 'CS2 League Stats' });
+    // The link contains both "CS" logo mark and "CSScout" text
+    const link = screen.getByRole('link', { name: /CSScout/i });
     expect(link).toHaveAttribute('href', '/');
   });
 
@@ -32,7 +33,7 @@ describe('Navbar', () => {
       </BrowserRouter>
     );
 
-    const navbar = screen.getByRole('link', { name: 'CS2 League Stats' }).parentElement;
-    expect(navbar).toHaveClass('navbar');
+    const nav = screen.getByRole('navigation');
+    expect(nav).toHaveClass('sticky', 'glass');
   });
 });
