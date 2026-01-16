@@ -14,7 +14,7 @@ describe('PlayerSearch', () => {
       />
     );
 
-    expect(screen.getByPlaceholderText('Search player by nickname...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search player...')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
@@ -31,7 +31,7 @@ describe('PlayerSearch', () => {
       />
     );
 
-    await user.type(screen.getByPlaceholderText('Search player by nickname...'), 'test');
+    await user.type(screen.getByPlaceholderText('Search player...'), 'test');
     expect(handleChange).toHaveBeenCalled();
   });
 

@@ -30,7 +30,7 @@ describe('HomePage', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByPlaceholderText('Search player by nickname...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search player...')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
@@ -53,7 +53,7 @@ describe('HomePage', () => {
       </BrowserRouter>
     );
 
-    await user.type(screen.getByPlaceholderText('Search player by nickname...'), 'TestPlayer');
+    await user.type(screen.getByPlaceholderText('Search player...'), 'TestPlayer');
     await user.click(screen.getByRole('button', { name: 'Search' }));
 
     await waitFor(() => {
@@ -73,7 +73,7 @@ describe('HomePage', () => {
       </BrowserRouter>
     );
 
-    await user.type(screen.getByPlaceholderText('Search player by nickname...'), 'test');
+    await user.type(screen.getByPlaceholderText('Search player...'), 'test');
     await user.click(screen.getByRole('button', { name: 'Search' }));
 
     await waitFor(() => {
@@ -100,7 +100,7 @@ describe('HomePage', () => {
       </BrowserRouter>
     );
 
-    await user.type(screen.getByPlaceholderText('Search player by nickname...'), 'TestPlayer');
+    await user.type(screen.getByPlaceholderText('Search player...'), 'TestPlayer');
     await user.click(screen.getByRole('button', { name: 'Search' }));
 
     await waitFor(() => {
