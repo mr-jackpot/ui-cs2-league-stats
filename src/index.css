@@ -1,2 +1,15 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: dark;
+}
+
+:root {
+  --color-good: #22c55e;
+  --color-avg: #eab308;
+  --color-poor: #ef4444;
+  --color-cs2: #ff6b35;
+}
+
+body {
+  background-color: #1d232a;
+}

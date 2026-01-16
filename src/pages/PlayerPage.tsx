@@ -11,7 +11,8 @@ export function PlayerPage() {
   const [player, setPlayer] = useState<Player | null>(null);
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [stats, setStats] = useState<PlayerStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingSeasons, setLoadingSeasons] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export function PlayerPage() {
     if (!playerId) return;
 
     const fetchSeasons = async () => {
-      setLoading(true);
+      setLoadingSeasons(true);
       setError(null);
 
       try {
@@ -49,7 +50,7 @@ export function PlayerPage() {
       } catch {
         setError('Failed to fetch player seasons');
       } finally {
-        setLoading(false);
+        setLoadingSeasons(false);
       }
     };
 
@@ -59,7 +60,7 @@ export function PlayerPage() {
   const handleSelectSeason = async (season: Season) => {
     if (!playerId) return;
 
-    setLoading(true);
+    setLoadingStats(true);
     setError(null);
 
     try {
@@ -68,12 +69,16 @@ export function PlayerPage() {
     } catch {
       setError('Failed to fetch player stats');
     } finally {
-      setLoading(false);
+      setLoadingStats(false);
     }
   };
 
   const handleBack = () => {
     navigate('/');
+  };
+
+  const closeModal = () => {
+    setStats(null);
   };
 
   return (
@@ -86,7 +91,11 @@ export function PlayerPage() {
 
       {player ? (
         <PlayerProfile player={player} onBack={handleBack}>
-          {!loading && (
+          {loadingSeasons ? (
+            <div className="flex justify-center py-8">
+              <span className="loading loading-spinner loading-lg"></span>
+            </div>
+          ) : (
             <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
           )}
         </PlayerProfile>
@@ -99,19 +108,36 @@ export function PlayerPage() {
                 Back to search
               </button>
             </div>
-            {!loading && (
+            {loadingSeasons ? (
+              <div className="flex justify-center py-8">
+                <span className="loading loading-spinner loading-lg"></span>
+              </div>
+            ) : (
               <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
             )}
           </div>
         </div>
       )}
 
-      {stats && <PlayerStatsCard stats={stats} />}
-
-      {loading && (
-        <div className="flex justify-center py-8">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
+      {/* Stats Modal */}
+      {(stats || loadingStats) && (
+        <dialog className="modal modal-open">
+          <div className="modal-box max-w-3xl p-0 bg-transparent shadow-none">
+            {loadingStats ? (
+              <div className="flex justify-center py-16">
+                <span className="loading loading-spinner loading-lg"></span>
+              </div>
+            ) : (
+              stats && <PlayerStatsCard stats={stats} />
+            )}
+            <div className="flex justify-center mt-4">
+              <button className="btn btn-ghost" onClick={closeModal}>
+                Close
+              </button>
+            </div>
+          </div>
+          <div className="modal-backdrop bg-black/50" onClick={closeModal} />
+        </dialog>
       )}
     </div>
   );

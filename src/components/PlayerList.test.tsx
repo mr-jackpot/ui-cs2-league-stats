@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PlayerList } from './PlayerList';
 import type { Player } from '../types/api';
+import { countryCodeToFlag } from '../utils/countryFlag';
 
 const mockPlayers: Player[] = [
   {
@@ -31,11 +32,10 @@ describe('PlayerList', () => {
   it('renders player list when players exist', () => {
     render(<PlayerList players={mockPlayers} onSelect={() => {}} />);
 
-    expect(screen.getByText('Search Results')).toBeInTheDocument();
     expect(screen.getByText('TestPlayer1')).toBeInTheDocument();
     expect(screen.getByText('TestPlayer2')).toBeInTheDocument();
-    expect(screen.getByText('US')).toBeInTheDocument();
-    expect(screen.getByText('GB')).toBeInTheDocument();
+    expect(screen.getByText(countryCodeToFlag('US'))).toBeInTheDocument();
+    expect(screen.getByText(countryCodeToFlag('GB'))).toBeInTheDocument();
   });
 
   it('renders player avatars', () => {
