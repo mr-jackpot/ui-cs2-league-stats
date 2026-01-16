@@ -1,5 +1,5 @@
 import type { Player } from '../types/api';
-import { countryCodeToFlag } from '../utils/countryFlag';
+import { CountryFlag } from '../utils/countryFlag';
 
 interface PlayerListProps {
   players: Player[];
@@ -40,9 +40,7 @@ export function PlayerList({ players, onSelect }: PlayerListProps) {
               Click to view stats
             </div>
           </div>
-          <span className="text-2xl" title={player.country}>
-            {countryCodeToFlag(player.country)}
-          </span>
+          <CountryFlag countryCode={player.country} className="w-6 h-4 rounded-sm" />
           <svg
             className="w-5 h-5 text-base-content/30"
             fill="none"
