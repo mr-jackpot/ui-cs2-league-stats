@@ -121,8 +121,8 @@ export function PlayerPage() {
 
       {/* Stats Modal */}
       {(stats || loadingStats) && (
-        <dialog className="modal modal-open px-2">
-          <div className="modal-box w-full max-w-3xl p-0 bg-transparent shadow-none mx-2">
+        <dialog className="modal modal-open px-2 py-4 md:py-0 items-start md:items-center overflow-y-auto">
+          <div className="modal-box w-full max-w-3xl p-0 bg-transparent shadow-none mx-2 my-auto">
             {loadingStats ? (
               <div className="flex justify-center py-16">
                 <span className="loading loading-spinner loading-lg"></span>
@@ -130,8 +130,8 @@ export function PlayerPage() {
             ) : (
               stats && <PlayerStatsCard stats={stats} />
             )}
-            <div className="flex justify-center mt-4">
-              <button className="btn btn-ghost" onClick={closeModal}>
+            <div className="flex justify-center mt-4 pb-4">
+              <button className="btn btn-ghost bg-base-100" onClick={closeModal}>
                 Close
               </button>
             </div>
