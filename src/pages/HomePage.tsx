@@ -39,6 +39,7 @@ export function HomePage() {
         onChange={setSearchQuery}
         onSubmit={handleSearch}
         loading={loading}
+        hasResults={players.length > 0}
       />
 
       {error && (

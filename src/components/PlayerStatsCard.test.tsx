@@ -43,9 +43,9 @@ describe('PlayerStatsCard', () => {
   it('renders match statistics', () => {
     render(<PlayerStatsCard stats={mockStats} />);
 
-    expect(screen.getByText('10')).toBeInTheDocument(); // Matches
-    expect(screen.getByText('7')).toBeInTheDocument(); // Wins
-    expect(screen.getByText('3')).toBeInTheDocument(); // Losses
+    expect(screen.getByText('10 matches played')).toBeInTheDocument();
+    expect(screen.getByText('7W')).toBeInTheDocument(); // Wins
+    expect(screen.getByText('3L')).toBeInTheDocument(); // Losses
     expect(screen.getByText('15')).toBeInTheDocument(); // MVPs
   });
 

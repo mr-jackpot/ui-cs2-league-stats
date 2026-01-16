@@ -4,3 +4,5 @@ export { PlayerList } from './PlayerList';
 export { PlayerProfile } from './PlayerProfile';
 export { SeasonsList } from './SeasonsList';
 export { PlayerStatsCard } from './PlayerStatsCard';
+export { StatBar } from './StatBar';
+export { RatingBadge } from './RatingBadge';

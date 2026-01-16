@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PlayerProfile } from './PlayerProfile';
 import type { Player } from '../types/api';
+import { countryCodeToFlag } from '../utils/countryFlag';
 
 const mockPlayer: Player = {
   player_id: '123',
@@ -22,14 +23,14 @@ describe('PlayerProfile', () => {
     expect(screen.getByText('TestPlayer')).toBeInTheDocument();
   });
 
-  it('renders player country', () => {
+  it('renders player country flag', () => {
     render(
       <PlayerProfile player={mockPlayer} onBack={() => {}}>
         <div>Child content</div>
       </PlayerProfile>
     );
 
-    expect(screen.getByText('US')).toBeInTheDocument();
+    expect(screen.getByText(countryCodeToFlag('US'))).toBeInTheDocument();
   });
 
   it('renders player avatar', () => {
