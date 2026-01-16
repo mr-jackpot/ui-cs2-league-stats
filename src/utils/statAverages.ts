@@ -22,13 +22,12 @@ export function getStatColor(value: number, average: number, higherIsBetter = tr
   }
 }
 
-export function calculateRating(kdRatio: number, adr: number, winRate: number): number {
+export function calculateRating(kdRatio: number, adr: number): number {
   // Simplified rating calculation inspired by HLTV
-  const kdComponent = kdRatio * 0.4;
-  const adrComponent = (adr / 100) * 0.3;
-  const winComponent = (winRate / 100) * 0.3;
+  const kdComponent = kdRatio * 0.5;
+  const adrComponent = (adr / 100) * 0.5;
 
-  return Math.round((kdComponent + adrComponent + winComponent) * 100) / 100;
+  return Math.round((kdComponent + adrComponent) * 100) / 100;
 }
 
 export function getRatingTier(rating: number): { label: string; color: string } {

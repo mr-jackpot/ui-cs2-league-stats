@@ -3,11 +3,10 @@ import { calculateRating, getRatingTier } from '../utils/statAverages';
 interface RatingBadgeProps {
   kdRatio: number;
   adr: number;
-  winRate: number;
 }
 
-export function RatingBadge({ kdRatio, adr, winRate }: RatingBadgeProps) {
-  const rating = calculateRating(kdRatio, adr, winRate);
+export function RatingBadge({ kdRatio, adr }: RatingBadgeProps) {
+  const rating = calculateRating(kdRatio, adr);
   const tier = getRatingTier(rating);
 
   return (

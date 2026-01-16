@@ -24,7 +24,6 @@ export function PlayerStatsCard({ stats }: PlayerStatsCardProps) {
           <RatingBadge
             kdRatio={stats.kd_ratio}
             adr={stats.adr}
-            winRate={stats.win_rate}
           />
         </div>
 
