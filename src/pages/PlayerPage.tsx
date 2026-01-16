@@ -82,9 +82,12 @@ export function PlayerPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4 py-6">
       {error && (
-        <div className="alert alert-error mb-4">
+        <div className="alert alert-error mb-6 rounded-xl">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           <span>{error}</span>
         </div>
       )}
@@ -92,51 +95,72 @@ export function PlayerPage() {
       {player ? (
         <PlayerProfile player={player} onBack={handleBack}>
           {loadingSeasons ? (
-            <div className="flex justify-center py-8">
-              <span className="loading loading-spinner loading-lg"></span>
+            <div className="flex flex-col items-center justify-center py-12">
+              <span className="loading loading-spinner loading-lg text-[var(--color-primary)]"></span>
+              <p className="text-base-content/40 mt-4 text-sm">Loading seasons...</p>
             </div>
           ) : (
             <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
           )}
         </PlayerProfile>
       ) : (
-        <div className="card bg-base-100 shadow-xl mb-4">
-          <div className="card-body">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="card-title">Player Seasons</h2>
-              <button className="btn btn-ghost btn-sm" onClick={handleBack}>
-                Back to search
-              </button>
-            </div>
-            {loadingSeasons ? (
-              <div className="flex justify-center py-8">
-                <span className="loading loading-spinner loading-lg"></span>
-              </div>
-            ) : (
-              <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
-            )}
+        <div className="glass rounded-2xl border border-white/5 p-6 md:p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-white">Player Seasons</h2>
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-base-content/60 hover:text-white hover:bg-white/10 transition-all duration-200"
+              onClick={handleBack}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to search
+            </button>
           </div>
+          {loadingSeasons ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <span className="loading loading-spinner loading-lg text-[var(--color-primary)]"></span>
+              <p className="text-base-content/40 mt-4 text-sm">Loading seasons...</p>
+            </div>
+          ) : (
+            <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
+          )}
         </div>
       )}
 
       {/* Stats Modal */}
       {(stats || loadingStats) && (
-        <dialog className="modal modal-open px-2 py-4 md:py-0 items-start md:items-center overflow-y-auto">
-          <div className="modal-box w-full max-w-3xl p-0 bg-transparent shadow-none mx-2 my-auto">
+        <dialog className="modal modal-open">
+          {/* Backdrop with blur */}
+          <div
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm animate-fade-in"
+            onClick={closeModal}
+          />
+
+          {/* Content */}
+          <div className="relative z-10 w-full max-w-3xl mx-4 my-auto max-h-[90vh] overflow-y-auto">
             {loadingStats ? (
-              <div className="flex justify-center py-16">
-                <span className="loading loading-spinner loading-lg"></span>
+              <div className="flex flex-col items-center justify-center py-20">
+                <span className="loading loading-spinner loading-lg text-[var(--color-primary)]"></span>
+                <p className="text-base-content/40 mt-4">Loading stats...</p>
               </div>
             ) : (
               stats && <PlayerStatsCard stats={stats} />
             )}
-            <div className="flex justify-center mt-4 pb-4">
-              <button className="btn btn-ghost bg-base-100" onClick={closeModal}>
+
+            {/* Close button */}
+            <div className="flex justify-center mt-6 pb-4">
+              <button
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium glass border border-white/10 text-base-content/80 hover:text-white hover:border-white/20 transition-all duration-200"
+                onClick={closeModal}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
                 Close
               </button>
             </div>
           </div>
-          <div className="modal-backdrop bg-black/50" onClick={closeModal} />
         </dialog>
       )}
     </div>

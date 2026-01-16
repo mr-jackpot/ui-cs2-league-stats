@@ -14,8 +14,8 @@ describe('PlayerSearch', () => {
       />
     );
 
-    expect(screen.getByPlaceholderText('Search player...')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search for a player...')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   it('calls onChange when typing', async () => {
@@ -31,7 +31,7 @@ describe('PlayerSearch', () => {
       />
     );
 
-    await user.type(screen.getByPlaceholderText('Search player...'), 'test');
+    await user.type(screen.getByPlaceholderText('Search for a player...'), 'test');
     expect(handleChange).toHaveBeenCalled();
   });
 
@@ -48,7 +48,7 @@ describe('PlayerSearch', () => {
       />
     );
 
-    await user.click(screen.getByRole('button', { name: 'Search' }));
+    await user.click(screen.getByRole('button'));
     expect(handleSubmit).toHaveBeenCalled();
   });
 

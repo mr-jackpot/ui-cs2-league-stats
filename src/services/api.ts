@@ -4,8 +4,9 @@ import type {
   PlayerSeasonsResponse,
   PlayerStats,
 } from '../types/api';
+import { config } from '../config';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = config.apiUrl;
 
 export async function getPlayer(playerId: string): Promise<Player> {
   const response = await fetch(`${API_BASE}/players/${playerId}`);

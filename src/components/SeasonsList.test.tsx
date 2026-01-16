@@ -24,10 +24,10 @@ describe('SeasonsList', () => {
     expect(screen.getByText('No ESEA seasons found')).toBeInTheDocument();
   });
 
-  it('renders seasons table when seasons exist', () => {
+  it('renders seasons list when seasons exist', () => {
     render(<SeasonsList seasons={mockSeasons} onSelectSeason={() => {}} />);
 
-    expect(screen.getByText('ESEA Seasons')).toBeInTheDocument();
+    expect(screen.getByText('Seasons')).toBeInTheDocument();
     expect(screen.getByText('ESEA S55 EU Open')).toBeInTheDocument();
     expect(screen.getByText('ESEA S54 EU Open')).toBeInTheDocument();
   });
@@ -35,24 +35,23 @@ describe('SeasonsList', () => {
   it('renders match counts', () => {
     render(<SeasonsList seasons={mockSeasons} onSelectSeason={() => {}} />);
 
-    expect(screen.getByText('10')).toBeInTheDocument();
-    expect(screen.getByText('8')).toBeInTheDocument();
+    expect(screen.getByText('10 matches')).toBeInTheDocument();
+    expect(screen.getByText('8 matches')).toBeInTheDocument();
   });
 
-  it('renders table headers', () => {
+  it('renders season count', () => {
     render(<SeasonsList seasons={mockSeasons} onSelectSeason={() => {}} />);
 
-    expect(screen.getByText('Season')).toBeInTheDocument();
-    expect(screen.getByText('Matches')).toBeInTheDocument();
+    expect(screen.getByText('2 competitions')).toBeInTheDocument();
   });
 
-  it('calls onSelectSeason when View Stats is clicked', async () => {
+  it('calls onSelectSeason when View is clicked', async () => {
     const handleSelect = vi.fn();
     const user = userEvent.setup();
 
     render(<SeasonsList seasons={mockSeasons} onSelectSeason={handleSelect} />);
 
-    const viewButtons = screen.getAllByRole('button', { name: 'View Stats' });
+    const viewButtons = screen.getAllByRole('button', { name: /View/i });
     await user.click(viewButtons[0]);
 
     expect(handleSelect).toHaveBeenCalledWith(mockSeasons[0]);

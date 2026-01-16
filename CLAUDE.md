@@ -1,7 +1,7 @@
-# CS2 League Stats UI - Development Guide
+# CSScout - Development Guide
 
 ## Project Overview
-A React frontend for the CS2 League Stats API. Allows users to search for players, view their ESEA seasons, and see detailed statistics.
+A React frontend for scouting CS2 player statistics. Allows users to search for players, view their ESEA seasons, and see detailed statistics.
 
 ## Tech Stack
 - **Framework**: React 19.2.0

@@ -33,7 +33,7 @@ export function HomePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4">
       <PlayerSearch
         value={searchQuery}
         onChange={setSearchQuery}
@@ -43,7 +43,10 @@ export function HomePage() {
       />
 
       {error && (
-        <div className="alert alert-error mb-4">
+        <div className="alert alert-error mb-6 rounded-xl">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           <span>{error}</span>
         </div>
       )}
@@ -51,8 +54,9 @@ export function HomePage() {
       <PlayerList players={players} onSelect={handleSelectPlayer} />
 
       {loading && (
-        <div className="flex justify-center py-8">
-          <span className="loading loading-spinner loading-lg"></span>
+        <div className="flex flex-col items-center justify-center py-12">
+          <span className="loading loading-spinner loading-lg text-[var(--color-primary)]"></span>
+          <p className="text-base-content/40 mt-4 text-sm">Searching players...</p>
         </div>
       )}
     </div>
