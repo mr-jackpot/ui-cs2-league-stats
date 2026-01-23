@@ -23,8 +23,6 @@ export function getStatColor(value: number, average: number, higherIsBetter = tr
 }
 
 export function calculateRating(kdRatio: number, adr: number): number {
-  // Rating calculation: 1.0 KD + 75 ADR = 1.0 rating (average)
-  // 1.4 KD + 90 ADR ≈ 1.32 rating (elite)
   const kdComponent = kdRatio * 0.6;
   const adrComponent = (adr / 75) * 0.4;
 
@@ -32,8 +30,7 @@ export function calculateRating(kdRatio: number, adr: number): number {
 }
 
 export function getRatingTier(rating: number): { label: string; color: string } {
-  if (rating >= 1.2) return { label: 'Elite', color: 'var(--color-good)' };
-  if (rating >= 1.0) return { label: 'Good', color: 'var(--color-primary)' };
+  if (rating >= 1.15) return { label: 'Great', color: 'var(--color-good)' };
   if (rating >= 0.9) return { label: 'Average', color: 'var(--color-avg)' };
   return { label: 'Below', color: 'var(--color-poor)' };
 }
