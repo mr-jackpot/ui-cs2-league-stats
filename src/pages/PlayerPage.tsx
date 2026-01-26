@@ -10,10 +10,15 @@ export function PlayerPage() {
 
   const [player, setPlayer] = useState<Player | null>(null);
   const [seasons, setSeasons] = useState<Season[]>([]);
-  const [stats, setStats] = useState<PlayerStats | null>(null);
   const [loadingSeasons, setLoadingSeasons] = useState(true);
-  const [loadingStats, setLoadingStats] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Map of competition_id -> PlayerStats (cached stats)
+  const [seasonStatsMap, setSeasonStatsMap] = useState<Record<string, PlayerStats>>({});
+  // Map of competition_id -> loading state
+  const [loadingStatsMap, setLoadingStatsMap] = useState<Record<string, boolean>>({});
+  // Currently selected season ID for modal
+  const [selectedSeasonId, setSelectedSeasonId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!playerId) return;
@@ -57,28 +62,42 @@ export function PlayerPage() {
     fetchSeasons();
   }, [playerId]);
 
-  const handleSelectSeason = async (season: Season) => {
-    if (!playerId) return;
+  // Prefetch stats for all seasons
+  useEffect(() => {
+    if (!playerId || seasons.length === 0) return;
 
-    setLoadingStats(true);
-    setError(null);
+    // Set all seasons to loading
+    setLoadingStatsMap(
+      Object.fromEntries(seasons.map(s => [s.competition_id, true]))
+    );
 
-    try {
-      const response = await getPlayerStats(playerId, season.competition_id);
-      setStats(response);
-    } catch {
-      setError('Failed to fetch player stats');
-    } finally {
-      setLoadingStats(false);
-    }
+    // Fetch each season independently (parallel)
+    seasons.forEach(async (season) => {
+      try {
+        const stats = await getPlayerStats(playerId, season.competition_id);
+        setSeasonStatsMap(prev => ({ ...prev, [season.competition_id]: stats }));
+      } catch {
+        // Silent fail - rating just won't show
+      } finally {
+        setLoadingStatsMap(prev => ({ ...prev, [season.competition_id]: false }));
+      }
+    });
+  }, [playerId, seasons]);
+
+  const handleSelectSeason = (season: Season) => {
+    setSelectedSeasonId(season.competition_id);
   };
+
+  // Get cached stats for modal
+  const selectedStats = selectedSeasonId ? seasonStatsMap[selectedSeasonId] : null;
+  const isLoadingSelectedStats = selectedSeasonId ? loadingStatsMap[selectedSeasonId] : false;
 
   const handleBack = () => {
     navigate('/');
   };
 
   const closeModal = () => {
-    setStats(null);
+    setSelectedSeasonId(null);
   };
 
   return (
@@ -100,7 +119,12 @@ export function PlayerPage() {
               <p className="text-base-content/40 mt-4 text-sm">Loading seasons...</p>
             </div>
           ) : (
-            <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
+            <SeasonsList
+              seasons={seasons}
+              seasonStatsMap={seasonStatsMap}
+              loadingStatsMap={loadingStatsMap}
+              onSelectSeason={handleSelectSeason}
+            />
           )}
         </PlayerProfile>
       ) : (
@@ -123,13 +147,18 @@ export function PlayerPage() {
               <p className="text-base-content/40 mt-4 text-sm">Loading seasons...</p>
             </div>
           ) : (
-            <SeasonsList seasons={seasons} onSelectSeason={handleSelectSeason} />
+            <SeasonsList
+              seasons={seasons}
+              seasonStatsMap={seasonStatsMap}
+              loadingStatsMap={loadingStatsMap}
+              onSelectSeason={handleSelectSeason}
+            />
           )}
         </div>
       )}
 
       {/* Stats Modal */}
-      {(stats || loadingStats) && (
+      {selectedSeasonId && (
         <dialog className="modal modal-open">
           {/* Backdrop with blur */}
           <div
@@ -139,13 +168,13 @@ export function PlayerPage() {
 
           {/* Content */}
           <div className="relative z-10 w-full max-w-3xl mx-4 my-auto max-h-[90vh] overflow-y-auto">
-            {loadingStats ? (
+            {isLoadingSelectedStats ? (
               <div className="flex flex-col items-center justify-center py-20">
                 <span className="loading loading-spinner loading-lg text-[var(--color-primary)]"></span>
                 <p className="text-base-content/40 mt-4">Loading stats...</p>
               </div>
             ) : (
-              stats && <PlayerStatsCard stats={stats} />
+              selectedStats && <PlayerStatsCard stats={selectedStats} />
             )}
 
             {/* Close button */}

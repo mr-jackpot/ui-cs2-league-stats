@@ -6,3 +6,4 @@ export { SeasonsList } from './SeasonsList';
 export { PlayerStatsCard } from './PlayerStatsCard';
 export { StatBar } from './StatBar';
 export { RatingBadge } from './RatingBadge';
+export { InlineRatingBadge } from './InlineRatingBadge';

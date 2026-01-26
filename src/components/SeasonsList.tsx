@@ -1,12 +1,24 @@
-import type { Season } from '../types/api';
+import type { Season, PlayerStats } from '../types/api';
+import { InlineRatingBadge } from './InlineRatingBadge';
 
 interface SeasonsListProps {
   seasons: Season[];
+  seasonStatsMap: Record<string, PlayerStats>;
+  loadingStatsMap: Record<string, boolean>;
   onSelectSeason: (season: Season) => void;
 }
 
-export function SeasonsList({ seasons, onSelectSeason }: SeasonsListProps) {
-  if (seasons.length === 0) {
+export function SeasonsList({ seasons, seasonStatsMap, loadingStatsMap, onSelectSeason }: SeasonsListProps) {
+  // Filter out seasons with 0 matches (only after stats are loaded)
+  const filteredSeasons = seasons.filter((season) => {
+    const stats = seasonStatsMap[season.competition_id];
+    const isLoading = loadingStatsMap[season.competition_id];
+    // Show while loading, hide if stats loaded and matches_played is 0
+    if (isLoading || !stats) return true;
+    return stats.matches_played > 0;
+  });
+
+  if (filteredSeasons.length === 0) {
     return (
       <div className="text-center py-12">
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-base-200/50 flex items-center justify-center">
@@ -27,13 +39,13 @@ export function SeasonsList({ seasons, onSelectSeason }: SeasonsListProps) {
           Seasons
         </h3>
         <span className="text-xs text-base-content/30">
-          {seasons.length} competition{seasons.length !== 1 ? 's' : ''}
+          {filteredSeasons.length} competition{filteredSeasons.length !== 1 ? 's' : ''}
         </span>
       </div>
 
       {/* Season cards */}
       <div className="space-y-2">
-        {seasons.map((season) => (
+        {filteredSeasons.map((season) => (
           <div
             key={season.competition_id}
             className="group flex items-center justify-between p-4 rounded-xl bg-base-200/30 hover:bg-base-200/50 border border-transparent hover:border-[var(--color-primary)]/20 cursor-pointer transition-all duration-200"
@@ -44,8 +56,24 @@ export function SeasonsList({ seasons, onSelectSeason }: SeasonsListProps) {
                 {season.competition_name}
               </div>
               <div className="text-sm text-base-content/40">
-                {season.match_count} match{season.match_count !== 1 ? 'es' : ''}
+                {(() => {
+                  const stats = seasonStatsMap[season.competition_id];
+                  const count = stats?.matches_played ?? season.match_count;
+                  return `${count} match${count !== 1 ? 'es' : ''}`;
+                })()}
               </div>
+            </div>
+
+            {/* Rating badge */}
+            <div className="flex-shrink-0 mr-3">
+              {loadingStatsMap[season.competition_id] ? (
+                <span className="loading loading-spinner loading-sm text-base-content/30"></span>
+              ) : seasonStatsMap[season.competition_id] ? (
+                <InlineRatingBadge
+                  kdRatio={seasonStatsMap[season.competition_id].kd_ratio}
+                  adr={seasonStatsMap[season.competition_id].adr}
+                />
+              ) : null}
             </div>
 
             <button
