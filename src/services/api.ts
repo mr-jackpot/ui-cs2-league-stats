@@ -8,8 +8,18 @@ import { config } from '../config';
 
 const API_BASE = config.apiUrl;
 
+const apiFetch = (url: string, options: RequestInit = {}): Promise<Response> => {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      ...(config.apiKey && { 'X-API-Key': config.apiKey }),
+    },
+  });
+};
+
 export async function getPlayer(playerId: string): Promise<Player> {
-  const response = await fetch(`${API_BASE}/players/${playerId}`);
+  const response = await apiFetch(`${API_BASE}/players/${playerId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch player');
   }
@@ -17,7 +27,7 @@ export async function getPlayer(playerId: string): Promise<Player> {
 }
 
 export async function searchPlayers(nickname: string): Promise<PlayerSearchResponse> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${API_BASE}/players/search?nickname=${encodeURIComponent(nickname)}`
   );
   if (!response.ok) {
@@ -27,7 +37,7 @@ export async function searchPlayers(nickname: string): Promise<PlayerSearchRespo
 }
 
 export async function getPlayerSeasons(playerId: string): Promise<PlayerSeasonsResponse> {
-  const response = await fetch(`${API_BASE}/players/${playerId}/esea`);
+  const response = await apiFetch(`${API_BASE}/players/${playerId}/esea`);
   if (!response.ok) {
     throw new Error('Failed to fetch player seasons');
   }
@@ -38,7 +48,7 @@ export async function getPlayerStats(
   playerId: string,
   competitionId: string
 ): Promise<PlayerStats> {
-  const response = await fetch(
+  const response = await apiFetch(
     `${API_BASE}/players/${playerId}/competitions/${competitionId}/stats`
   );
   if (!response.ok) {
