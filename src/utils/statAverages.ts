@@ -23,6 +23,11 @@ export function getStatColor(value: number, average: number, higherIsBetter = tr
 }
 
 export function calculateRating(kdRatio: number, adr: number): number {
+  // If ADR is 0 (CS:GO didn't track ADR), use K/D ratio only
+  if (adr === 0) {
+    return Math.round(kdRatio * 100) / 100;
+  }
+
   const kdComponent = kdRatio * 0.6;
   const adrComponent = (adr / 75) * 0.4;
 
