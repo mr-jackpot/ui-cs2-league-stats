@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPlayer, getPlayerSeasons, getPlayerStats } from '../services/api';
+import { getPlayer, getPlayerSeasons, getPlayerStats, searchPlayers } from '../services/api';
 import type { Season, PlayerStats, Player } from '../types/api';
 import { PlayerProfile, SeasonsList, PlayerStatsCard } from '../components';
 
 export function PlayerPage() {
-  const { playerId } = useParams<{ playerId: string }>();
+  const { nickname } = useParams<{ nickname: string }>();
   const navigate = useNavigate();
 
   const [player, setPlayer] = useState<Player | null>(null);
@@ -21,36 +21,63 @@ export function PlayerPage() {
   const [selectedSeasonId, setSelectedSeasonId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!playerId) return;
+    if (!nickname) return;
 
     const fetchPlayer = async () => {
-      const storedPlayer = sessionStorage.getItem(`player-${playerId}`);
+      // Use cached data for immediate display while fetching full data
+      const storedPlayer = sessionStorage.getItem(`player-${nickname}`);
       if (storedPlayer) {
-        setPlayer(JSON.parse(storedPlayer));
-        return;
-      }
+        const cachedPlayer = JSON.parse(storedPlayer) as Player;
+        setPlayer(cachedPlayer);
 
-      try {
-        const playerData = await getPlayer(playerId);
-        setPlayer(playerData);
-        sessionStorage.setItem(`player-${playerId}`, JSON.stringify(playerData));
-      } catch {
-        // Player fetch failed, continue without player details
+        // Fetch full player data using cached player_id
+        try {
+          const playerData = await getPlayer(cachedPlayer.player_id);
+          setPlayer(playerData);
+          sessionStorage.setItem(`player-${nickname}`, JSON.stringify(playerData));
+        } catch {
+          // Player fetch failed, continue with cached data
+        }
+      } else {
+        // No cached data, search by nickname to get player_id
+        try {
+          const searchResult = await searchPlayers(nickname);
+          const foundPlayer = searchResult.items.find(
+            p => p.nickname.toLowerCase() === nickname.toLowerCase()
+          );
+          if (foundPlayer) {
+            setPlayer(foundPlayer);
+            sessionStorage.setItem(`player-${nickname}`, JSON.stringify(foundPlayer));
+
+            // Fetch full player data
+            try {
+              const playerData = await getPlayer(foundPlayer.player_id);
+              setPlayer(playerData);
+              sessionStorage.setItem(`player-${nickname}`, JSON.stringify(playerData));
+            } catch {
+              // Continue with search result data
+            }
+          } else {
+            setError('Player not found');
+          }
+        } catch {
+          setError('Failed to find player');
+        }
       }
     };
 
     fetchPlayer();
-  }, [playerId]);
+  }, [nickname]);
 
   useEffect(() => {
-    if (!playerId) return;
+    if (!player) return;
 
     const fetchSeasons = async () => {
       setLoadingSeasons(true);
       setError(null);
 
       try {
-        const response = await getPlayerSeasons(playerId);
+        const response = await getPlayerSeasons(player.player_id);
         setSeasons(response.seasons);
       } catch {
         setError('Failed to fetch player seasons');
@@ -60,11 +87,12 @@ export function PlayerPage() {
     };
 
     fetchSeasons();
-  }, [playerId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [player?.player_id]);
 
   // Prefetch stats for all seasons
   useEffect(() => {
-    if (!playerId || seasons.length === 0) return;
+    if (!player || seasons.length === 0) return;
 
     // Set all seasons to loading
     setLoadingStatsMap(
@@ -74,7 +102,7 @@ export function PlayerPage() {
     // Fetch each season independently (parallel)
     seasons.forEach(async (season) => {
       try {
-        const stats = await getPlayerStats(playerId, season.competition_id);
+        const stats = await getPlayerStats(player.player_id, season.competition_id);
         setSeasonStatsMap(prev => ({ ...prev, [season.competition_id]: stats }));
       } catch {
         // Silent fail - rating just won't show
@@ -82,7 +110,8 @@ export function PlayerPage() {
         setLoadingStatsMap(prev => ({ ...prev, [season.competition_id]: false }));
       }
     });
-  }, [playerId, seasons]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [player?.player_id, seasons]);
 
   const handleSelectSeason = (season: Season) => {
     setSelectedSeasonId(season.competition_id);

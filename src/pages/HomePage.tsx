@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchPlayers } from '../services/api';
 import type { Player } from '../types/api';
-import { PlayerSearch, PlayerList } from '../components';
+import { PlayerSearch, PlayerList, NoResultsFound } from '../components';
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ export function HomePage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
@@ -24,19 +25,23 @@ export function HomePage() {
       setError('Failed to search players');
     } finally {
       setLoading(false);
+      setHasSearched(true);
     }
   };
 
   const handleSelectPlayer = (player: Player) => {
-    sessionStorage.setItem(`player-${player.player_id}`, JSON.stringify(player));
-    navigate(`/player/${player.player_id}`);
+    sessionStorage.setItem(`player-${player.nickname}`, JSON.stringify(player));
+    navigate(`/player/${encodeURIComponent(player.nickname)}`);
   };
 
   return (
     <div className="max-w-4xl mx-auto px-4">
       <PlayerSearch
         value={searchQuery}
-        onChange={setSearchQuery}
+        onChange={(value) => {
+          setSearchQuery(value);
+          setHasSearched(false);
+        }}
         onSubmit={handleSearch}
         loading={loading}
         hasResults={players.length > 0}
@@ -52,6 +57,10 @@ export function HomePage() {
       )}
 
       <PlayerList players={players} onSelect={handleSelectPlayer} />
+
+      {!loading && !error && hasSearched && players.length === 0 && (
+        <NoResultsFound query={searchQuery} />
+      )}
 
       {loading && (
         <div className="flex flex-col items-center justify-center py-12">
