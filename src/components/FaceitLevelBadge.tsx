@@ -7,7 +7,7 @@ interface FaceitLevelBadgeProps {
 
 export function FaceitLevelBadge({ level, elo }: FaceitLevelBadgeProps) {
   const color = getFaceitLevelColor(level);
-  const imageUrl = `https://static.csstats.gg/images/ranks/faceit/level${level}.png`;
+  const imageUrl = `/images/faceit/level${level}.png`;
 
   return (
     <div className="flex items-center gap-2 flex-shrink-0">
